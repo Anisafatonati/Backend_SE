@@ -15,7 +15,7 @@ class AnimalController extends Controller
         echo "-$animal <br>";
     }
 
-    public function store(request $request){
+    public function store(Request $request){
         echo "Menambahkan hewan baru <br>";
 
         array_push($this->animals, $request->animal);
