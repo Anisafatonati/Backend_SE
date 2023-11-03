@@ -10,6 +10,12 @@ class StudentController extends Controller
     public function index()
     {
         $students = Student::all();
+        if($students->isEmpty()){
+            $data = [
+                'message'=> 'Resource is empty'
+            ];
+            return response()->json($data,204);
+        }
 
         $data = [
             "message" => "Get all Student",
@@ -19,9 +25,33 @@ class StudentController extends Controller
         //kirim data (json) dan response code 200
         return response()->json($data, 200);
     }
+    public function show($id){
+        $student = Student::find($id);
+        if(!$student){
+            $data = [
+                "message"=> "Data not found"
+            ] ;
+            return response()->json($data,404);
+        }
+        $data = [
+            "massage" => "Show detail resource",
+            "data"=> $student
+        ] ;
+        //mengembalikan data dan status code 200
+        return response()->json($data, 200);
+        
+    }
 
     //membuat method store
     public function store(Request $request){
+        //validasi data request
+        $request->validate([
+            "name"=> "required",
+            "nim"=> "required",
+            "email"=> "required",
+            "jurusan"=> "required"
+        ]);
+
         //menangkap data request
         $input = [
             'name' => $request->name,
@@ -43,55 +73,58 @@ class StudentController extends Controller
     }
 
     public function update($id, Request $request){
-        // Temukan siswa berdasarkan ID
+        // cari id student yang ingin diupdate 
         $student = Student::find($id);
         
         // Jika siswa tidak ditemukan, kembalikan respons error
-        if(!$student) {
-            $data = [
-                'message' => "Student not found",
+        if($student) {
+            #menangkap data request
+            $input = [
+                'name'=> $request->name ?? $student->name,
+                'nim'=> $request->nim ?? $student->nim,
+                'email'=> $request->email ?? $student->email,
+                'jurusan'=> $request->jurusan ?? $student->jurusan
             ];
-            return response()->json($data, 404);
+                #melakukan update data 
+            $student->update($input);
+
+            $data = [
+                'message' => "Student is updated",
+                'data' => $student
+            ];
+                #mengembalikan data (json) dan kode 200
+            return response()->json($data, 200);
         }
-    
-        // Update data siswa
-        $student->name = $request->input('name');
-        $student->nim = $request->input('nim');
-        $student->email = $request->input('email');
-        $student->jurusan = $request->input('jurusan');
-        $student->save();
-    
-        $data = [
-            'message' => "Student updated successfully",
-            'data' => $student,
-        ];
-    
-        // Mengembalikan respons JSON dengan kode 200
-        return response()->json($data, 200);
+        else {
+            $data = [
+                'message'=> 'Student not found'
+            ];
+            return response()->json($data,404);
+        }
     }
 
     public function destroy($id)
     {
     // Temukan siswa berdasarkan ID
-    $student = Student::find($id);
-    
-    // Jika siswa tidak ditemukan, kembalikan respons error
-    if(!$student) {
-        $data = [
-            'message' => "Student not found",
-        ];
-        return response()->json($data, 404);
-    }
+        $student = Student::find($id);
+        
+        // Jika siswa tidak ditemukan, kembalikan respons error
+        if($student) {
+            # hapus student tersebut
+            $student->delete();
+            $data = [
+                'message' => "Student is delete",
+            ];
+            #mengembalikan data (json) dan kode 200
+            return response()->json($data, 200);
+        }
 
-    // Hapus siswa dari database
-    $student->delete();
-
-    $data = [
-        'message' => "Student deleted successfully",
-    ];
-
-    // Mengembalikan respons JSON dengan kode 200
-    return response()->json($data,);
+        else {
+            $data = [
+                "message"=> "Student not found"
+            ] ;
+            return response()->json($data,404);
+        }
 }
 
 
