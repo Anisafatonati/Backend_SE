@@ -2,7 +2,6 @@
  * Fungsi untuk menampilkan hasil download
  * @param {string} result - Nama file yang didownload
  */
-
 const showDownload = (result) => {
     console.log("Download berhasil");
     console.log(`Hasil Download: ${result}`);
@@ -10,24 +9,19 @@ const showDownload = (result) => {
 
 /**
  * Fungsi untuk download file
- * @param {function} callback - Function callback show
+ * @returns {Promise<string>} - Promise yang akan resolve dengan nama file yang didownload
  */
-const download = (showDownload) => {
-    return new Promise(function () {
-        setTimeout(function () {
-            showDownload("windows-10.exe");
+const download = () => {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve("windows-10.exe");
         }, 3000);
     });
 };
 
 const main = async () => {
-    console.log(await download(showDownload));
+    const result = await download();
+    showDownload(result);
 };
-main();
 
-/**
- * TODO:
- * - Refactor callback ke Promise atau Async Await
- * - Refactor function ke ES6 Arrow Function
- * - Refactor string ke ES6 Template Literals
- */
+main();
