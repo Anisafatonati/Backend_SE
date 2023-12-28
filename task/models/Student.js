@@ -1,27 +1,34 @@
-// import mysql
-const mysql = require("mysql")
+// import database
+const db = require("../config/database");
 
-// import dotenv
-require("dotenv").config();
+// membuat class Model Student
+class Student {
+  /**
+   * Membuat method static all.
+   */
+  static all() {
+    // return Promise sebagai solusi Asynchronous
+    return new Promise((resolve, reject) => {
+      const sql = "SELECT * from students";
+      /**
+       * Melakukan query menggunakan method query.
+       * Menerima 2 params: query dan callback
+       */
+      db.query(sql, (err, results) => {
+        resolve(results);
+      });
+    });
+  }
 
-// make connection
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE,
-});
+  /**
+   * TODO 1: Buat fungsi untuk insert data.
+   * Method menerima parameter data yang akan diinsert.
+   * Method mengembalikan data student yang baru diinsert.
+   */
+  static create() {
+    // code here
+  }
+}
 
-// connect to database
-db.connect(function (err) {
-    if (err) {
-        console.log(`koneksi error: ${err}`);
-        return;
-    } else {
-        console.log("koneksi berhasil");
-        return;
-    }
-});
-
-// export db
-module.exports = db;
+// export class Student
+module.exports = Student;

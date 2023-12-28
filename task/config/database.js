@@ -19,4 +19,14 @@ const db = mysql.createConnection({
  * Connect ke database menggunakan method connect.
  * Menerima parameter callback
  */
-db.con
+db.connect((err) => {
+  if (err) {
+    console.log("Error connecting " + err.stack);
+    return;
+  } else {
+    console.log("Connected to database");
+    return;
+  }
+});
+
+module.exports = db;

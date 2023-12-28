@@ -1,7 +1,7 @@
 {
-  "name": "student-api",
+  "name": "task-pertemuan-12",
   "version": "1.0.0",
-  "description": "Building RESTful API with Express (1)",
+  "description": "Student API",
   "main": "index.js",
   "scripts": {
     "start": "nodemon app.js"
@@ -13,7 +13,6 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "mysql": "^2.18.1",
-    "mysql2": "^3.6.5",
     "nodemon": "^3.0.2"
   }
 }
